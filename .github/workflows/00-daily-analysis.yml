@@ -33,7 +33,6 @@ jobs:
     runs-on: ubuntu-latest
     # 兼容误将 STOCK_LIST 配到同名 Environment variables 的场景；
     # 推荐位置仍是 Settings -> Secrets and variables -> Actions -> Repository variables。
-    environment: STOCK_LIST
     # 添加超时限制，防止任务卡死
     timeout-minutes: ${{ fromJSON(vars.ANALYSIS_TIMEOUT_MINUTES || '30') }}
     
@@ -76,7 +75,7 @@ jobs:
           LITELLM_CONFIG: ${{ vars.LITELLM_CONFIG || secrets.LITELLM_CONFIG }}
           LITELLM_CONFIG_YAML: ${{ vars.LITELLM_CONFIG_YAML || secrets.LITELLM_CONFIG_YAML }}
           LITELLM_API_KEY: ${{ secrets.LITELLM_API_KEY }}
-          LITELLM_MODEL: ${{ vars.LITELLM_MODEL || secrets.LITELLM_MODEL }}
+          LITELLM_MODEL: ${{ vars.LITELLM_MODEL || secrets.LITELLM_MODEL || 'gemini/gemini-2.5-flash' }}
           LITELLM_FALLBACK_MODELS: ${{ vars.LITELLM_FALLBACK_MODELS || secrets.LITELLM_FALLBACK_MODELS }}
           AGENT_LITELLM_MODEL: ${{ vars.AGENT_LITELLM_MODEL || secrets.AGENT_LITELLM_MODEL }}
           VISION_MODEL: ${{ vars.VISION_MODEL || secrets.VISION_MODEL }}
@@ -458,7 +457,7 @@ jobs:
           if [ -n "${STOCK_LIST_CONFIG:-}" ]; then
             export STOCK_LIST="$STOCK_LIST_CONFIG"
           elif [ -z "${STOCK_LIST:-}" ]; then
-            export STOCK_LIST="600519"
+            export STOCK_LIST="QQQM,SPYM,SPCX"
           fi
 
           # 处理 LITELLM YAML 配置文件
